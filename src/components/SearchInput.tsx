@@ -1,12 +1,15 @@
 import { KeyboardEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import gitLogo02 from "../assets/img/git_logo_02.png";
+import gitLogo04 from "../assets/img/git_logo_04.png";
 import { SearchOutlined } from '@ant-design/icons';
 import { message } from "antd";
+import { setStorage } from "../util/util";
 
 const SearchInput = () => {
 	const navigate = useNavigate()
+	const location = useLocation();
 	const [keyWord, setKeyWord] = useState('');
 
 	const handleSearchClick = () => {
@@ -15,6 +18,7 @@ const SearchInput = () => {
 			return;
 		}
 
+		setStorage('keyWord', keyWord);
 		navigate('/search-result');
 	}
 	
@@ -23,9 +27,9 @@ const SearchInput = () => {
 	}
 
 	return (
-		<SearchInputStyled>
+		<SearchInputStyled className={location.pathname === '/' ? 'home' : ""}>
 			<Link to="/" className="link">
-				<img src={gitLogo02} alt="github logo image" />
+				<img src={location.pathname === '/' ? gitLogo02 : gitLogo04} alt="github logo" />
 			</Link>
 			<div className="inputBox">
 				<input type="text" value={keyWord} onChange={(event) => setKeyWord(event.target.value)} onKeyDown={handleEnterPress}/>
@@ -44,20 +48,19 @@ export default SearchInput;
 
 const SearchInputStyled = styled.div`
 	position: absolute;
-	top: 40%;
+	top: 10px;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, 0);
 	width: 580px;
-
 
 	.link {
 		display: block;
 		margin: 0 auto 20px;
-		width: 320px;
-		
+		width: 210px;
+
 		img {
 			display: block;
-			width: 320px;
+			width: 100%;
 		}
 	}
 
@@ -95,5 +98,15 @@ const SearchInputStyled = styled.div`
 		font-size: 1.4rem;
   	margin-top: 10px;
 		text-align: center;
+	}
+
+	&.home {
+		top: 40%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		.link {
+			width: 320px;
+		}
 	}
 `

@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import SearchInput from "../../components/SearchInput";
 
 const SearchResult = () => {
 	return (
 		<SearchResultStyled className="searchResult">
-
+			<SearchInput />
 		</SearchResultStyled>
 	)
 }
