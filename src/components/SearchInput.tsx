@@ -8,11 +8,12 @@ import { message } from "antd";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setReduxKeyword } from "../redux/keywordSlice";
 import { RootState } from "../redux/store";
+import { setReduxIssuesPage } from "../redux/issuesPageSlice";
 
 const SearchInput = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const keyword = useAppSelector((state: RootState) => state.keyword);
   const [keywordState, setKeywordState] = useState<string>(keyword);
 
@@ -27,7 +28,8 @@ const SearchInput = () => {
     }
 
     dispatch(setReduxKeyword(keywordState));
-    navigate("/search-result");
+    dispatch(setReduxIssuesPage(false));
+    if ( location.pathname === '/' ) navigate('/search-result');
   };
 
   const handleEnterPress = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -115,6 +117,7 @@ const SearchInputStyled = styled.div`
     font-size: 1.4rem;
     margin-top: 10px;
     text-align: center;
+    font-family: "Noto Sans KR", sans-serif;
   }
 
   &.home {

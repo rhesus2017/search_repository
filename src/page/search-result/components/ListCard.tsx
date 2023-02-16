@@ -14,10 +14,13 @@ import { useDispatch } from "react-redux";
 import { setReduxFavoriteList } from "../../../redux/favoriteListSlice";
 import { useEffect, useRef } from "react";
 import { useRepositoryListQuery } from "../../../querys/repositoryDadaHooks";
+import { message } from "antd";
+
+const FAVORITE_MAX_LENGTH = 4;
 
 interface ListCardProps {
   item: RepositoryListItem;
-  lastCard: boolean;
+  lastCard?: boolean;
 }
 
 const ListCard = (props: ListCardProps) => {
@@ -27,16 +30,14 @@ const ListCard = (props: ListCardProps) => {
   const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
   const keyword = useAppSelector((state: RootState) => state.keyword);
   const repositoryList = useRepositoryListQuery(keyword);
-
-  const handleFavoriteCheck = () => {
-    return Boolean(favoriteList.filter(repo => repo.id === item.id).length)
-  }
+  const favoriteCheck = Boolean(favoriteList.filter(repo => repo.id === item.id).length);
 
   const handleFavoriteClick = () => {
-    if ( handleFavoriteCheck() ) {
-      dispatch(setReduxFavoriteList(favoriteList.filter(repo => repo.id !== item.id)))
+    if ( favoriteCheck ) {
+      dispatch(setReduxFavoriteList(favoriteList.filter(repo => repo.id !== item.id)));
     } else {
-      dispatch(setReduxFavoriteList([...favoriteList, item]));
+      if ( favoriteList.length >= FAVORITE_MAX_LENGTH ) message.info('즐겨찾기는 최대 4개까지 가능합니다.');
+      else dispatch(setReduxFavoriteList([...favoriteList, item]));
     }
   }
 
@@ -57,14 +58,9 @@ const ListCard = (props: ListCardProps) => {
   }, []);
 
   return (
-    <ListCardStyled ref={lastCard ? targetRef : null}>
+    <ListCardStyled ref={lastCard ? targetRef : null} className="listCard">
       <div className="button" onClick={handleFavoriteClick}>
-        {handleFavoriteCheck() ? (
-          <img src={favorite} alt="즐겨찾기에 추가됐습니다" />
-        ) : (
-          <img src={notFavorite} alt="즐겨찾기에 추가되지 않았습니다" />
-        )}
-        
+        <img src={favoriteCheck ? favorite : notFavorite} alt={favoriteCheck ? "즐겨찾기에 추가됐습니다" : "즐겨찾기에 추가되지 않았습니다"} />
       </div>
       <a
         href={item.html_url}
@@ -94,12 +90,10 @@ const ListCard = (props: ListCardProps) => {
 export default ListCard;
 
 const ListCardStyled = styled.div`
-  width: calc((100% - 60px) / 4);
   height: 119px;
   float: left;
   border: 1px solid #999;
   border-radius: 4px;
-  margin-right: 15px;
   padding: 15px;
   margin-bottom: 15px;
   position: relative;

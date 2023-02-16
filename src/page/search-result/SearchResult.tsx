@@ -1,13 +1,15 @@
 import { Spin } from "antd";
 import styled from "styled-components";
 import SearchInput from "../../components/SearchInput";
-import { useRepositoryListQuery } from "../../querys/repositoryDadaHooks";
+import { useIssuesListQuery, useRepositoryListQuery } from "../../querys/repositoryDadaHooks";
 import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import FavoriteList from "./components/FavoriteList";
+import IssueList from "./components/IssueList";
 import SearchResultList from "./components/SearchResultList";
 
 const SearchResult = () => {
+  const issuesPage = useAppSelector((state: RootState) => state.issuesPage);
   const keyword = useAppSelector((state: RootState) => state.keyword);
   const repositoryList = useRepositoryListQuery(keyword);
 
@@ -16,7 +18,7 @@ const SearchResult = () => {
       <Spin spinning={repositoryList.isFetching}>
         <SearchInput/>
         <div className="searchResultWrap">
-          <SearchResultList/>
+          {issuesPage ? <IssueList /> : <SearchResultList/>}
           <FavoriteList />
         </div>
       </Spin>
@@ -41,11 +43,6 @@ const SearchResultStyled = styled.div`
     width: 100%;
     height: calc(100vh - 150px);
     top: 150px;
-
-    &:after {
-      content: "";
-      display: block;
-      clear: both;
-    }
+    display: flex;
   }
 `;

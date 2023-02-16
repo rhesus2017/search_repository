@@ -1,5 +1,5 @@
 import axios from "axios";
-import { RepositoryList } from "../models/repository";
+import { IssueData, RepositoryList } from "../models/repository";
 
 const PER_PAGE = 80;
 
@@ -14,3 +14,13 @@ export const getRepositoryListAPI = async (keyword: string, page: number) => {
     isLast: data.items.length < PER_PAGE
   }
 };
+
+export const getIssuesListAPI = async (keyword: string, page: number) => {
+  const [owner, name] = keyword.split("/");
+  const { data } = await axios.get<IssueData[]>(
+    `https://api.github.com/repos/${owner}/${name}/issues?per_page=100&page=${page}`
+  );
+
+  return data
+};
+

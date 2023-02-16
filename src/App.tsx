@@ -2,7 +2,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./page/home/Home";
 import SearchResult from "./page/search-result/SearchResult";
-import axios from "axios";
 
 export const queryClient = new QueryClient({ defaultOptions: {
   queries: {
@@ -14,8 +13,6 @@ export const queryClient = new QueryClient({ defaultOptions: {
 }});
 
 const App = () => {
-  axios.defaults.headers.common["Authorization"] = `token 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`;
-
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>

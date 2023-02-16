@@ -3,12 +3,14 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import keywordReducer from "./keywordSlice";
 import favoriteListReducer from "./favoriteListSlice";
+import issuesPageReducer from "./issuesPageSlice";
 
 type RootStateType = ReturnType<typeof rootReducer>;
 
 const rootReducer = combineReducers({
   keyword: keywordReducer,
-  favoriteList: favoriteListReducer
+  favoriteList: favoriteListReducer,
+  issuesPage: issuesPageReducer
 });
 
 const persistConfig = {

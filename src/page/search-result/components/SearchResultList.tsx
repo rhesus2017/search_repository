@@ -19,16 +19,12 @@ const SearchResultList = () => {
       </p>
       <div className="listWrap">
         {repositoryList.total_count ? (
-          repositoryList.items.map((item, index, items) => {
-            const lastCard = items.length === index + 1;
-            return (
-              <ListCard 
-                key={item.id}
-                item={item}
-                lastCard={lastCard}
-              />
-            )
-          })
+          repositoryList.items.map((item, index, items) => 
+          <ListCard 
+            key={item.id}
+            item={item}
+            lastCard={items.length === index + 1}
+          />)
         ) : (
           !repositoryList.isFetching && <div className="nonData">검색결과가 존재하지 않습니다</div>
         )}
@@ -40,7 +36,6 @@ const SearchResultList = () => {
 export default SearchResultList;
 
 const SearchResultListStyled = styled.div`
-  float: left;
   width: 80%;
   height: 100%;
   position: relative;
@@ -61,6 +56,11 @@ const SearchResultListStyled = styled.div`
     width: 100%;
     height: calc(100% - 62px);
     overflow: auto;
+
+    .listCard {
+      width: calc((100% - 60px) / 4);
+      margin-right: 15px;
+    }
 
     .nonData {
       position: absolute;
