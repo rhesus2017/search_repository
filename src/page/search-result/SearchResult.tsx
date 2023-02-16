@@ -1,9 +1,10 @@
 import { Spin } from "antd";
 import styled from "styled-components";
 import SearchInput from "../../components/SearchInput";
-import { useRepositoryListQuery } from "../../hooks/repositoryDadaHooks";
+import { useRepositoryListQuery } from "../../querys/repositoryDadaHooks";
 import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
+import FavoriteList from "./components/FavoriteList";
 import SearchResultList from "./components/SearchResultList";
 
 const SearchResult = () => {
@@ -13,9 +14,10 @@ const SearchResult = () => {
   return (
     <SearchResultStyled>
       <Spin spinning={repositoryList.isFetching}>
-        <SearchInput />
+        <SearchInput/>
         <div className="searchResultWrap">
-          <SearchResultList />
+          <SearchResultList/>
+          <FavoriteList />
         </div>
       </Spin>
     </SearchResultStyled>

@@ -5,15 +5,16 @@ import gitLogo02 from "../assets/img/git_logo_02.png";
 import gitLogo04 from "../assets/img/git_logo_04.png";
 import { SearchOutlined } from "@ant-design/icons";
 import { message } from "antd";
-import { getStorage, setStorage } from "../util/util";
-import { useAppDispatch } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setReduxKeyword } from "../redux/keywordSlice";
+import { RootState } from "../redux/store";
 
 const SearchInput = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const [keywordState, setKeywordState] = useState(getStorage("keyword"));
+  const keyword = useAppSelector((state: RootState) => state.keyword);
+  const [keywordState, setKeywordState] = useState<string>(keyword);
 
   useEffect(() => {
     if (location.pathname === "/") setKeywordState("");
@@ -26,7 +27,6 @@ const SearchInput = () => {
     }
 
     dispatch(setReduxKeyword(keywordState));
-    setStorage("keyword", keywordState);
     navigate("/search-result");
   };
 

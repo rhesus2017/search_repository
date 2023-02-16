@@ -1,12 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage/session";
+import storage from "redux-persist/lib/storage";
 import keywordReducer from "./keywordSlice";
+import favoriteListReducer from "./favoriteListSlice";
 
 type RootStateType = ReturnType<typeof rootReducer>;
 
 const rootReducer = combineReducers({
   keyword: keywordReducer,
+  favoriteList: favoriteListReducer
 });
 
 const persistConfig = {
@@ -21,11 +23,9 @@ const persistedReducer = persistReducer<RootStateType>(
 );
 
 const store = configureStore({
-  reducer: persistedReducer,
-  devTools: process.env.NODE_ENV !== "production",
+  reducer: persistedReducer
 });
 
 export default store;
-
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
