@@ -8,7 +8,7 @@ import { message } from "antd";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setReduxKeyword } from "../redux/keywordSlice";
 import { RootState } from "../redux/store";
-import { setReduxIssuesPage } from "../redux/issuesPageSlice";
+import { setReduxIsIssuesPage } from "../redux/isIssuesPageSlice";
 
 const SearchInput = () => {
   const dispatch = useAppDispatch();
@@ -28,8 +28,8 @@ const SearchInput = () => {
     }
 
     dispatch(setReduxKeyword(keywordState));
-    dispatch(setReduxIssuesPage(false));
-    if ( location.pathname === '/' ) navigate('/search-result');
+    dispatch(setReduxIsIssuesPage(false));
+    if (location.pathname === "/") navigate("/search");
   };
 
   const handleEnterPress = (event: KeyboardEvent<HTMLInputElement>) => {

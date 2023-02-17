@@ -13,54 +13,69 @@ import { RootState } from "../../../redux/store";
 import { useDispatch } from "react-redux";
 import { setReduxFavoriteList } from "../../../redux/favoriteListSlice";
 import { useEffect, useRef } from "react";
-import { useRepositoryListQuery } from "../../../querys/repositoryDadaHooks";
+import { useRepositoryListQuery } from "../../../queries/repositoryDadaHooks";
 import { message } from "antd";
 
 const FAVORITE_MAX_LENGTH = 4;
 
-interface ListCardProps {
+interface SearchCardProps {
   item: RepositoryListItem;
   lastCard?: boolean;
 }
 
-const ListCard = (props: ListCardProps) => {
+const SearchCard = (props: SearchCardProps) => {
   const { item, lastCard } = props;
   const dispatch = useDispatch();
   const targetRef = useRef<HTMLDivElement>(null);
   const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
   const keyword = useAppSelector((state: RootState) => state.keyword);
   const repositoryList = useRepositoryListQuery(keyword);
-  const favoriteCheck = Boolean(favoriteList.filter(repo => repo.id === item.id).length);
+  const isFavorite = Boolean(
+    favoriteList.filter((repo) => repo.id === item.id).length
+  );
 
   const handleFavoriteClick = () => {
-    if ( favoriteCheck ) {
-      dispatch(setReduxFavoriteList(favoriteList.filter(repo => repo.id !== item.id)));
+    if (isFavorite) {
+      dispatch(
+        setReduxFavoriteList(favoriteList.filter((repo) => repo.id !== item.id))
+      );
     } else {
-      if ( favoriteList.length >= FAVORITE_MAX_LENGTH ) message.info('즐겨찾기는 최대 4개까지 가능합니다.');
+      if (favoriteList.length >= FAVORITE_MAX_LENGTH)
+        message.info("즐겨찾기는 최대 4개까지 가능합니다.");
       else dispatch(setReduxFavoriteList([...favoriteList, item]));
     }
-  }
+  };
 
   useEffect(() => {
-    const handleObserver = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+    const handleObserver = (
+      entries: IntersectionObserverEntry[],
+      observer: IntersectionObserver
+    ) => {
       const target = entries[0];
-      if ( target.isIntersecting ) {
+      if (target.isIntersecting) {
         observer.unobserve(target.target);
         repositoryList.fetchNextPage();
-      } 
+      }
     };
 
     const option = { rootMargin: "0px", threshold: 0 };
     const observer = new IntersectionObserver(handleObserver, option);
     if (targetRef.current) observer.observe(targetRef.current);
-    
+
     return () => observer.disconnect();
   }, []);
 
   return (
-    <ListCardStyled ref={lastCard ? targetRef : null} className="listCard">
+    <SearchCardStyled ref={lastCard ? targetRef : null} className="listCard">
       <div className="button" onClick={handleFavoriteClick}>
-        <img src={favoriteCheck ? favorite : notFavorite} alt={favoriteCheck ? "즐겨찾기에 추가됐습니다" : "즐겨찾기에 추가되지 않았습니다"} />
+        <img
+          src={isFavorite ? favorite : notFavorite}
+          alt={
+            isFavorite
+              ? "즐겨찾기에 추가됐습니다"
+              : "즐겨찾기에 추가되지 않았습니다"
+          }
+        />
       </div>
       <a
         href={item.html_url}
@@ -83,13 +98,13 @@ const ListCard = (props: ListCardProps) => {
           <span>{item.forks_count.toLocaleString()}</span>
         </span>
       </div>
-    </ListCardStyled>
+    </SearchCardStyled>
   );
 };
 
-export default ListCard;
+export default SearchCard;
 
-const ListCardStyled = styled.div`
+const SearchCardStyled = styled.div`
   height: 119px;
   float: left;
   border: 1px solid #999;

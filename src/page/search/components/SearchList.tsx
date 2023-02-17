@@ -1,41 +1,39 @@
 import styled from "styled-components";
-import { useRepositoryListQuery } from "../../../querys/repositoryDadaHooks";
+import { useRepositoryListQuery } from "../../../queries/repositoryDadaHooks";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import ListCard from "./ListCard";
+import SearchCard from "./SearchCard";
 
-const SearchResultList = () => {
+const SearchList = () => {
   const keyword = useAppSelector((state: RootState) => state.keyword);
   const repositoryList = useRepositoryListQuery(keyword);
 
   return (
-    <SearchResultListStyled>
+    <SearchListStyled>
       <p className="all">
-        총{" "}
-        <span>
-          {repositoryList.total_count}
-        </span>
+        총 <span>{repositoryList.total_count}</span>
         개의 데이터가 있습니다
       </p>
       <div className="listWrap">
-        {repositoryList.total_count ? (
-          repositoryList.items.map((item, index, items) => 
-          <ListCard 
-            key={item.id}
-            item={item}
-            lastCard={items.length === index + 1}
-          />)
-        ) : (
-          !repositoryList.isFetching && <div className="nonData">검색결과가 존재하지 않습니다</div>
-        )}
+        {repositoryList.total_count
+          ? repositoryList.items.map((item, index, items) => (
+              <SearchCard
+                key={item.id}
+                item={item}
+                lastCard={items.length === index + 1}
+              />
+            ))
+          : !repositoryList.isFetching && (
+              <div className="nonData">검색결과가 존재하지 않습니다</div>
+            )}
       </div>
-    </SearchResultListStyled>
+    </SearchListStyled>
   );
 };
 
-export default SearchResultList;
+export default SearchList;
 
-const SearchResultListStyled = styled.div`
+const SearchListStyled = styled.div`
   width: 80%;
   height: 100%;
   position: relative;

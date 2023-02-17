@@ -1,16 +1,18 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./page/home/Home";
-import SearchResult from "./page/search-result/SearchResult";
+import Search from "./page/search/Search";
 
-export const queryClient = new QueryClient({ defaultOptions: {
-  queries: {
-    cacheTime: 0,
-    retry: false,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  }
-}});
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: 0,
+      retry: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => {
   return (
@@ -18,7 +20,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/search-result" element={<SearchResult />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

@@ -1,29 +1,33 @@
+import { message } from "antd";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useAppSelector } from "../../../redux/hooks";
-import { setReduxIssuesPage } from "../../../redux/issuesPageSlice";
+import { setReduxIsIssuesPage } from "../../../redux/isIssuesPageSlice";
 import { RootState } from "../../../redux/store";
-import ListCard from "./ListCard";
+import SearchCard from "./SearchCard";
 
 const FavoriteList = () => {
   const dispatch = useDispatch();
-  const issuesPage = useAppSelector((state: RootState) => state.issuesPage);
+  const issuesPage = useAppSelector((state: RootState) => state.isIssuesPage);
   const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
+
+  const handleGoToIssuesClick = () => {
+    favoriteList.length || issuesPage
+      ? dispatch(setReduxIsIssuesPage(!issuesPage))
+      : message.info("관심 레포지토리가 존재하지 않습니다.");
+  };
 
   return (
     <FavoriteListStyled>
-      <div className="link" onClick={() => dispatch(setReduxIssuesPage(!issuesPage))}>
-        {issuesPage ? '검색 된 레포지토리 보러가기' : '관심 레포지토리 이슈 보러가기'}
+      <div className="link" onClick={() => handleGoToIssuesClick()}>
+        {issuesPage
+          ? "검색 된 레포지토리 보러가기"
+          : "관심 레포지토리 이슈 보러가기"}
       </div>
 
       <div className="favoriteListWrap">
         {favoriteList.length ? (
-          favoriteList.map((item) => (
-            <ListCard
-              key={item.id}
-              item={item}
-            />
-          ))
+          favoriteList.map((item) => <SearchCard key={item.id} item={item} />)
         ) : (
           <div className="nonData">
             관심 레포지토리가
@@ -84,5 +88,5 @@ const FavoriteListStyled = styled.div`
       text-align: center;
       line-height: 1.4;
     }
-}
+  }
 `;

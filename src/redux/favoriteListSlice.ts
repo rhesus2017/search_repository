@@ -7,7 +7,10 @@ export const favoriteListSlice = createSlice({
   name: "favoriteList",
   initialState,
   reducers: {
-    setReduxFavoriteList: (_state, action: PayloadAction<RepositoryListItem[]>) => {
+    setReduxFavoriteList: (
+      _state,
+      action: PayloadAction<RepositoryListItem[]>
+    ) => {
       return action.payload;
     },
   },

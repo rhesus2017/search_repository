@@ -1,34 +1,34 @@
 import { Spin } from "antd";
 import styled from "styled-components";
 import SearchInput from "../../components/SearchInput";
-import { useIssuesListQuery, useRepositoryListQuery } from "../../querys/repositoryDadaHooks";
+import { useRepositoryListQuery } from "../../queries/repositoryDadaHooks";
 import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import FavoriteList from "./components/FavoriteList";
 import IssueList from "./components/IssueList";
-import SearchResultList from "./components/SearchResultList";
+import SearchList from "./components/SearchList";
 
-const SearchResult = () => {
-  const issuesPage = useAppSelector((state: RootState) => state.issuesPage);
+const Search = () => {
+  const isIssuesPage = useAppSelector((state: RootState) => state.isIssuesPage);
   const keyword = useAppSelector((state: RootState) => state.keyword);
   const repositoryList = useRepositoryListQuery(keyword);
 
   return (
-    <SearchResultStyled>
+    <SearchStyled>
       <Spin spinning={repositoryList.isFetching}>
-        <SearchInput/>
+        <SearchInput />
         <div className="searchResultWrap">
-          {issuesPage ? <IssueList /> : <SearchResultList/>}
+          {isIssuesPage ? <IssueList /> : <SearchList />}
           <FavoriteList />
         </div>
       </Spin>
-    </SearchResultStyled>
+    </SearchStyled>
   );
 };
 
-export default SearchResult;
+export default Search;
 
-const SearchResultStyled = styled.div`
+const SearchStyled = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;

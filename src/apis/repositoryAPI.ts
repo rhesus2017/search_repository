@@ -11,8 +11,8 @@ export const getRepositoryListAPI = async (keyword: string, page: number) => {
   return {
     items: data.items,
     nextPage: page + 1,
-    isLast: data.items.length < PER_PAGE
-  }
+    isLast: data.items.length < PER_PAGE,
+  };
 };
 
 export const getIssuesListAPI = async (keyword: string, page: number) => {
@@ -21,6 +21,5 @@ export const getIssuesListAPI = async (keyword: string, page: number) => {
     `https://api.github.com/repos/${owner}/${name}/issues?per_page=100&page=${page}`
   );
 
-  return data
+  return data;
 };
-
