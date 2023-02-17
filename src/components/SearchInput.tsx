@@ -8,7 +8,7 @@ import { message } from "antd";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setReduxKeyword } from "../redux/keywordSlice";
 import { RootState } from "../redux/store";
-import { setReduxIsIssuesPage } from "../redux/isIssuesPageSlice";
+import { setReduxIsIssuesPage } from "../redux/isIssuePageSlice";
 
 const SearchInput = () => {
   const dispatch = useAppDispatch();

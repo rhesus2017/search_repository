@@ -1,9 +1,7 @@
 import { message } from "antd";
-import { useInfiniteQuery, useQueries } from "react-query";
-import { getIssuesListAPI, getRepositoryListAPI } from "../apis/repositoryAPI";
-import { useAppSelector } from "../redux/hooks";
-import { RootState } from "../redux/store";
-import { issuesKeys, repositoryKeys } from "./queryKeys";
+import { useInfiniteQuery } from "react-query";
+import { getRepositoryListAPI } from "../apis/repositoryAPI";
+import { repositoryKeys } from "./queryKeys";
 
 export const useRepositoryListQuery = (keyword: string) => {
   const query = useInfiniteQuery(
@@ -25,21 +23,4 @@ export const useRepositoryListQuery = (keyword: string) => {
   const total_count = items.length || 0;
 
   return { ...query, items, total_count };
-};
-
-export const useIssuesListQuery = (page: number) => {
-  const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
-
-  const queries = useQueries(
-    favoriteList.map((row, _index, array) => {
-      return {
-        queryKey: issuesKeys.list(array.length, row.id, page),
-        queryFn: () => getIssuesListAPI(row.full_name, page),
-      };
-    })
-  );
-
-  const items = queries.length ? queries.map((query) => query.data).flat() : [];
-
-  return { items };
 };

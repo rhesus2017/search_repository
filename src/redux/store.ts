@@ -3,20 +3,19 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import keywordReducer from "./keywordSlice";
 import favoriteListReducer from "./favoriteListSlice";
-import isIssuesPageReducer from "./isIssuesPageSlice";
+import isIssuePageReducer from "./isIssuePageSlice";
 
 type RootStateType = ReturnType<typeof rootReducer>;
 
 const rootReducer = combineReducers({
   keyword: keywordReducer,
   favoriteList: favoriteListReducer,
-  isIssuesPage: isIssuesPageReducer,
+  isIssuePage: isIssuePageReducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelists: [""],
 };
 
 const persistedReducer = persistReducer<RootStateType>(

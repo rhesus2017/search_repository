@@ -1,41 +1,68 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { IssueData } from "../../../models/repository";
-import { useIssuesListQuery } from "../../../queries/repositoryDadaHooks";
-import IssueCard from "./IssueCard";
+import { getIssueListAPI } from "../../../apis/repositoryAPI";
+import { IssueData, RepositoryListItem } from "../../../models/repository";
+import { useAppSelector } from "../../../redux/hooks";
+import { RootState } from "../../../redux/store";
 
 const IssueList = () => {
   const [page, setPage] = useState(1);
-  const [issuesListStore, setIssuesListStore] = useState<
-    (IssueData | undefined)[]
-  >([]);
-  const issuesList = useIssuesListQuery(page);
+  const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
+
+  const createIssuePromise = (page: number) => {
+    const promises = favoriteList.map((repo: RepositoryListItem) =>
+      getIssueListAPI(repo.full_name, page)
+    );
+
+    return promises;
+  };
+
+  const recursiveRequest: any = async (
+    createIssuePromise: any,
+    page: number
+  ) => {
+    const issues: IssueData[] = [];
+    const issuesBundle: { data: [] }[] = await Promise.all([
+      ...createIssuePromise(page),
+    ]);
+
+    issuesBundle.forEach((issue) => {
+      issues.push(...issue.data);
+    });
+
+    if (issues.length === 0) return [];
+
+    const recursiveResult = await recursiveRequest(
+      createIssuePromise,
+      page + 1
+    );
+
+    issues.sort(
+      (a, b) =>
+        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    );
+
+    return [...issues, ...recursiveResult];
+  };
 
   useEffect(() => {
-    if (issuesList.items.filter((item) => item === undefined).length) return;
-
-    if (page === 1) setIssuesListStore([...issuesList.items]);
-    else setIssuesListStore((state) => [...state, ...issuesList.items]);
-  }, [issuesList.items]);
-
-  useEffect(() => {
-    console.log(issuesListStore);
-  }, [issuesListStore]);
+    console.log(recursiveRequest(createIssuePromise, page));
+  }, [page]);
 
   return (
     <IssueListStyled>
-      <p className="all">
-        총 <span>{issuesListStore.length}</span>
+      {/* <p className="all">
+        총 <span>{recursiveRequest(createIssuePromise, page).length}</span>
         개의 데이터가 있습니다
       </p>
       <div className="listWrap">
-        {issuesListStore.length ? (
-          issuesListStore.map(
+        {issueList.length ? (
+          issueList.map(
             (item, index, items) =>
               item && (
                 <IssueCard
-                  key={item.html_url}
+                  key={index}
                   item={item}
                   setPage={setPage}
                   lastCard={items.length === index + 1}
@@ -45,7 +72,7 @@ const IssueList = () => {
         ) : (
           <div className="nonData">레포지토리 이슈가 존재하지 않습니다</div>
         )}
-      </div>
+      </div> */}
     </IssueListStyled>
   );
 };

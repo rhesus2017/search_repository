@@ -4,7 +4,7 @@ export const repositoryKeys = {
 
 export const issuesKeys = {
   list: (listLength: number, id: number, page: number) => [
-    "getIssuesList",
+    "getissueList",
     listLength,
     id,
     page,

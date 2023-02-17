@@ -2,40 +2,17 @@
 import styled from "styled-components";
 import { IssueData } from "../../../models/repository";
 import { BranchesOutlined, MessageOutlined } from "@ant-design/icons";
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 
 interface IssueCardProps {
   item: IssueData;
-  setPage: Dispatch<SetStateAction<number>>;
-  lastCard: boolean;
 }
 
 const IssueCard = (props: IssueCardProps) => {
-  const { item, setPage, lastCard } = props;
-  const targetRef = useRef<HTMLDivElement>(null);
+  const { item } = props;
   const createdTime = new Date(item.created_at);
 
-  useEffect(() => {
-    const handleObserver = (
-      entries: IntersectionObserverEntry[],
-      observer: IntersectionObserver
-    ) => {
-      const target = entries[0];
-      if (target.isIntersecting) {
-        observer.unobserve(target.target);
-        setPage((state) => state + 1);
-      }
-    };
-
-    const option = { rootMargin: "0px", threshold: 0 };
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (targetRef.current) observer.observe(targetRef.current);
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <IssueCardStyled ref={lastCard ? targetRef : null} className="listCard">
+    <IssueCardStyled className="listCard">
       <a
         className="content"
         href={item.html_url}
@@ -52,7 +29,11 @@ const IssueCard = (props: IssueCardProps) => {
                 <div
                   key={index}
                   className="label"
-                  style={{ backgroundColor: `#${label.color}` }}
+                  style={{
+                    backgroundColor: `#${
+                      label.color === "ffffff" ? "cccccc" : label.color
+                    }`,
+                  }}
                 >
                   {label.name}
                 </div>

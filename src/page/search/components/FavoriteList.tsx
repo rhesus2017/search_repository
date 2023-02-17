@@ -2,13 +2,13 @@ import { message } from "antd";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useAppSelector } from "../../../redux/hooks";
-import { setReduxIsIssuesPage } from "../../../redux/isIssuesPageSlice";
+import { setReduxIsIssuesPage } from "../../../redux/isIssuePageSlice";
 import { RootState } from "../../../redux/store";
 import SearchCard from "./SearchCard";
 
 const FavoriteList = () => {
   const dispatch = useDispatch();
-  const issuesPage = useAppSelector((state: RootState) => state.isIssuesPage);
+  const issuesPage = useAppSelector((state: RootState) => state.isIssuePage);
   const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
 
   const handleGoToIssuesClick = () => {
@@ -21,7 +21,7 @@ const FavoriteList = () => {
     <FavoriteListStyled>
       <div className="link" onClick={() => handleGoToIssuesClick()}>
         {issuesPage
-          ? "검색 된 레포지토리 보러가기"
+          ? "검색된 레포지토리 보러가기"
           : "관심 레포지토리 이슈 보러가기"}
       </div>
 

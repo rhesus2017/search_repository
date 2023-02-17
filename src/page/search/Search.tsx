@@ -9,7 +9,7 @@ import IssueList from "./components/IssueList";
 import SearchList from "./components/SearchList";
 
 const Search = () => {
-  const isIssuesPage = useAppSelector((state: RootState) => state.isIssuesPage);
+  const isIssuesPage = useAppSelector((state: RootState) => state.isIssuePage);
   const keyword = useAppSelector((state: RootState) => state.keyword);
   const repositoryList = useRepositoryListQuery(keyword);
 

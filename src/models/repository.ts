@@ -14,6 +14,7 @@ export interface RepositoryListItem {
 }
 
 export interface IssueData {
+  id: number;
   number: number;
   created_at: string;
   title: string;
@@ -22,4 +23,5 @@ export interface IssueData {
   pull_request: object;
   labels: { name: string; color: string }[];
   user: { login: string };
+  updated_at: string;
 }
