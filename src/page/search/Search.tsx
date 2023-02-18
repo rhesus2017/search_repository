@@ -1,4 +1,5 @@
 import { Spin } from "antd";
+import { useState } from "react";
 import styled from "styled-components";
 import SearchInput from "../../components/SearchInput";
 import { useRepositoryListQuery } from "../../queries/repositoryDadaHooks";
@@ -12,13 +13,14 @@ const Search = () => {
   const isIssuesPage = useAppSelector((state: RootState) => state.isIssuePage);
   const keyword = useAppSelector((state: RootState) => state.keyword);
   const repositoryList = useRepositoryListQuery(keyword);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <SearchStyled>
-      <Spin spinning={repositoryList.isFetching}>
+      <Spin spinning={repositoryList.isFetching || isLoading}>
         <SearchInput />
         <div className="searchResultWrap">
-          {isIssuesPage ? <IssueList /> : <SearchList />}
+          {isIssuesPage ? <IssueList isLoading={isLoading} setIsLoading={setIsLoading}/> : <SearchList />}
           <FavoriteList />
         </div>
       </Spin>

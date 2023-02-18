@@ -1,78 +1,82 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { Pagination, Spin } from "antd";
+import { AxiosResponse } from "axios";
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 import { getIssueListAPI } from "../../../apis/repositoryAPI";
 import { IssueData, RepositoryListItem } from "../../../models/repository";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
+import IssueCard from "./IssueCard";
 
-const IssueList = () => {
-  const [page, setPage] = useState(1);
+interface IssueListProps {
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+}
+
+const IssueList = (props: IssueListProps) => {
+  const { isLoading, setIsLoading } = props;
   const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
+  const [pageState, setPageState] = useState(1);
+  const [issueState, setIssueState] = useState<IssueData[]>([]);
+  
 
-  const createIssuePromise = (page: number) => {
-    const promises = favoriteList.map((repo: RepositoryListItem) =>
-      getIssueListAPI(repo.full_name, page)
-    );
-
-    return promises;
+  const issueListPromise = (page: number): Promise<AxiosResponse<IssueData[]>>[] => {
+    return favoriteList.map((favorite: RepositoryListItem) => getIssueListAPI(favorite.full_name, page));
   };
 
-  const recursiveRequest: any = async (
-    createIssuePromise: any,
-    page: number
-  ) => {
+  const issueListCollectionPromise = async (page: number): Promise<IssueData[]> => {
+    setIsLoading(true);
     const issues: IssueData[] = [];
-    const issuesBundle: { data: [] }[] = await Promise.all([
-      ...createIssuePromise(page),
+    const issuesList: { data: IssueData[] }[] = await Promise.all([
+      ...issueListPromise(page),
     ]);
 
-    issuesBundle.forEach((issue) => {
+    issuesList.forEach((issue) => {
       issues.push(...issue.data);
     });
 
+    setIsLoading(false);
     if (issues.length === 0) return [];
 
-    const recursiveResult = await recursiveRequest(
-      createIssuePromise,
+    const result = await issueListCollectionPromise(
       page + 1
     );
-
-    issues.sort(
-      (a, b) =>
-        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-    );
-
-    return [...issues, ...recursiveResult];
+    
+    return [...issues, ...result];
   };
 
   useEffect(() => {
-    console.log(recursiveRequest(createIssuePromise, page));
-  }, [page]);
+    issueListCollectionPromise(1).then(response => setIssueState(response.sort((a, b) =>
+      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    )))
+  }, [favoriteList.length]);
 
   return (
     <IssueListStyled>
-      {/* <p className="all">
-        총 <span>{recursiveRequest(createIssuePromise, page).length}</span>
+      <p className="all">
+        총 <span>{issueState.length}</span>
         개의 데이터가 있습니다
       </p>
       <div className="listWrap">
-        {issueList.length ? (
-          issueList.map(
-            (item, index, items) =>
+        {issueState.length ? (
+          <Fragment>
+            {issueState.slice(((pageState-1)*10), pageState*10).map(
+            (item) =>
               item && (
                 <IssueCard
-                  key={index}
+                  key={item.id}
                   item={item}
-                  setPage={setPage}
-                  lastCard={items.length === index + 1}
                 />
               )
-          )
+          )}
+            <Pagination defaultCurrent={1} total={issueState.length} showSizeChanger={false} onChange={(page) => setPageState(page)}/>
+          </Fragment>
         ) : (
-          <div className="nonData">레포지토리 이슈가 존재하지 않습니다</div>
+          !isLoading && <div className="nonData">레포지토리 이슈가 존재하지 않습니다</div>
+          
         )}
-      </div> */}
+      </div>
     </IssueListStyled>
   );
 };
@@ -85,6 +89,10 @@ const IssueListStyled = styled.div`
   position: relative;
   padding: 0px 2px 0 30px;
   margin-top: 30px;
+
+  .anticon {
+    line-height: 1;
+  }
 
   .all {
     font-size: 1.5rem;
@@ -100,6 +108,16 @@ const IssueListStyled = styled.div`
     width: 100%;
     height: calc(100% - 62px);
     overflow: auto;
+    padding-right: 15px;
+    padding-bottom: 50px;
+
+    > div:last-of-type {
+      margin-bottom: 40px;
+    }
+
+    .ant-pagination {
+      text-align: center;
+    }
 
     .nonData {
       position: absolute;

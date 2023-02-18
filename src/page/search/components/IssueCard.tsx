@@ -9,7 +9,7 @@ interface IssueCardProps {
 
 const IssueCard = (props: IssueCardProps) => {
   const { item } = props;
-  const createdTime = new Date(item.created_at);
+  const createdTime = new Date(item.updated_at);
 
   return (
     <IssueCardStyled className="listCard">
@@ -47,7 +47,7 @@ const IssueCard = (props: IssueCardProps) => {
           {item.title}
         </p>
         <p className="date">
-          #{item.number} opend on {createdTime.getMonth() + 1}/
+          #{item.number} updated on {createdTime.getMonth() + 1}/
           {createdTime.getDate() + 1} by {item.user.login}
         </p>
       </a>
@@ -64,25 +64,25 @@ const IssueCardStyled = styled.div`
   margin-bottom: 15px;
   position: relative;
   width: 100%;
-  height: 110px;
+  height: 100px;
 
   .content {
     display: block;
     float: left;
     width: 100%;
     height: 100%;
-    padding: 15px 30px;
+    padding: 15px 20px;
 
     .title {
       display: block;
       height: 25px;
-      font-size: 1.9rem;
+      font-size: 1.5rem;
       font-weight: bold;
       color: #555;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      margin-bottom: 5px;
+      margin-bottom: 0px;
 
       .anticon {
         line-height: 1;
@@ -90,7 +90,7 @@ const IssueCardStyled = styled.div`
     }
 
     .date {
-      margin-left: 24px;
+      margin-left: 20px;
       display: block;
       font-size: 1.4rem;
       color: #777;
@@ -103,7 +103,7 @@ const IssueCardStyled = styled.div`
     .projectNameWrap {
       display: block;
       width: 100%;
-      height: 24px;
+      height: 20px;
       margin-bottom: 5px;
 
       &:after {
@@ -123,7 +123,7 @@ const IssueCardStyled = styled.div`
         text-overflow: ellipsis;
         overflow: hidden;
         margin-right: 15px;
-        line-height: 23px;
+        line-height: 20px;
       }
 
       .labels {
@@ -138,10 +138,11 @@ const IssueCardStyled = styled.div`
           height: 100%;
           border-radius: 10px;
           text-align: center;
-          line-height: 20px;
+          line-height: 17px;
           color: #fff;
           padding: 0 10px;
           margin-right: 5px;
+          font-size: 1.2rem;
 
           &:last-of-type {
             margin-right: 0;

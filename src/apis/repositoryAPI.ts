@@ -15,11 +15,9 @@ export const getRepositoryListAPI = async (keyword: string, page: number) => {
   };
 };
 
-export const getIssueListAPI = async (keyword: string, page: number) => {
+export const getIssueListAPI = (keyword: string, page: number) => {
   const [owner, name] = keyword.split("/");
-  const { data } = await axios.get<IssueData[]>(
+  return axios.get<IssueData[]>(
     `https://api.github.com/repos/${owner}/${name}/issues?per_page=100&page=${page}`
   );
-
-  return data;
 };

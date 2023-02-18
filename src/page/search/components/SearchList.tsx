@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import { useRepositoryListQuery } from "../../../queries/repositoryDadaHooks";
 import { useAppSelector } from "../../../redux/hooks";
