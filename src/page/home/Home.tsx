@@ -1,14 +1,12 @@
-import styled from "styled-components";
 import SearchInput from "../../components/SearchInput";
+import { Fragment } from "react";
 
 const Home = () => {
   return (
-    <HomeStyled>
+    <Fragment>
       <SearchInput />
-    </HomeStyled>
+    </Fragment>
   );
 };
 
 export default Home;
-
-const HomeStyled = styled.div``;

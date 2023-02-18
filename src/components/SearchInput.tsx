@@ -9,27 +9,29 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setReduxKeyword } from "../redux/keywordSlice";
 import { RootState } from "../redux/store";
 import { setReduxIsIssuesPage } from "../redux/isIssuePageSlice";
+import { HOME_URL, SEARCH_URL } from "../constants/URLConstants";
 
 const SearchInput = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const keyword = useAppSelector((state: RootState) => state.keyword);
+  const isHomeURL = location.pathname === HOME_URL;
   const [keywordState, setKeywordState] = useState<string>(keyword);
 
   useEffect(() => {
-    if (location.pathname === "/") setKeywordState("");
+    if (isHomeURL) setKeywordState("");
   }, [location.pathname]);
 
   const handleSearchClick = () => {
-    if (!keywordState.length) {
+    if (!keywordState) {
       message.warning("키워드를 입력해주세요");
       return;
     }
 
     dispatch(setReduxKeyword(keywordState));
     dispatch(setReduxIsIssuesPage(false));
-    if (location.pathname === "/") navigate("/search");
+    if (isHomeURL) navigate(SEARCH_URL);
   };
 
   const handleEnterPress = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -37,10 +39,10 @@ const SearchInput = () => {
   };
 
   return (
-    <SearchInputStyled className={location.pathname === "/" ? "home" : ""}>
-      <Link to="/" className="link">
+    <SearchInputStyled className={isHomeURL ? "home" : ""}>
+      <Link to={HOME_URL} className="link">
         <img
-          src={location.pathname === "/" ? gitLogo02 : gitLogo04}
+          src={isHomeURL ? gitLogo02 : gitLogo04}
           alt="github logo"
         />
       </Link>

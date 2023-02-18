@@ -2,7 +2,7 @@ import { Spin } from "antd";
 import { useState } from "react";
 import styled from "styled-components";
 import SearchInput from "../../components/SearchInput";
-import { useRepositoryListQuery } from "../../queries/repositoryDadaHooks";
+import useRepositoryListQuery from "../../queries/repositoryListQuery";
 import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import FavoriteList from "./components/FavoriteList";

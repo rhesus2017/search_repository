@@ -17,26 +17,25 @@ interface IssueListProps {
 const IssueList = (props: IssueListProps) => {
   const { isLoading, setIsLoading } = props;
   const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
-  const [pageState, setPageState] = useState(1);
-  const [issueState, setIssueState] = useState<IssueData[]>([]);
+  const [page, setPage] = useState(1);
+  const [issue, setIssue] = useState<IssueData[]>([]);
   
 
-  const issueListPromise = (page: number): Promise<AxiosResponse<IssueData[]>>[] => {
+  const issueListPromises = (page: number): Promise<AxiosResponse<IssueData[]>>[] => {
     return favoriteList.map((favorite: RepositoryListItem) => getIssueListAPI(favorite.full_name, page));
   };
 
   const issueListCollectionPromise = async (page: number): Promise<IssueData[]> => {
-    setIsLoading(true);
+    
     const issues: IssueData[] = [];
     const issuesList: { data: IssueData[] }[] = await Promise.all([
-      ...issueListPromise(page),
+      ...issueListPromises(page),
     ]);
 
     issuesList.forEach((issue) => {
       issues.push(...issue.data);
     });
 
-    setIsLoading(false);
     if (issues.length === 0) return [];
 
     const result = await issueListCollectionPromise(
@@ -47,30 +46,34 @@ const IssueList = (props: IssueListProps) => {
   };
 
   useEffect(() => {
-    issueListCollectionPromise(1).then(response => setIssueState(response.sort((a, b) =>
-      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-    )))
+    setIsLoading(true);
+    issueListCollectionPromise(1).then(response => {
+      setIssue(response.sort((a, b) =>
+        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      ));
+    }).finally(() => {
+      setIsLoading(false);
+    })
   }, [favoriteList.length]);
 
   return (
     <IssueListStyled>
       <p className="all">
-        총 <span>{issueState.length}</span>
+        총 <span>{issue.length}</span>
         개의 데이터가 있습니다
       </p>
       <div className="listWrap">
-        {issueState.length ? (
+        {issue.length ? (
           <Fragment>
-            {issueState.slice(((pageState-1)*10), pageState*10).map(
-            (item) =>
+            {issue.slice(((page-1)*10), page*10).map((item) =>
               item && (
                 <IssueCard
                   key={item.id}
                   item={item}
                 />
               )
-          )}
-            <Pagination defaultCurrent={1} total={issueState.length} showSizeChanger={false} onChange={(page) => setPageState(page)}/>
+            )}
+            <Pagination defaultCurrent={1} total={issue.length} showSizeChanger={false} onChange={(page) => setPage(page)}/>
           </Fragment>
         ) : (
           !isLoading && <div className="nonData">레포지토리 이슈가 존재하지 않습니다</div>

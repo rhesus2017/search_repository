@@ -19,16 +19,15 @@ const FavoriteList = () => {
 
   return (
     <FavoriteListStyled>
-      <div className="link" onClick={() => handleGoToIssuesClick()}>
+      <div className="link" onClick={handleGoToIssuesClick}>
         {issuesPage
           ? "검색된 레포지토리 보러가기"
           : "관심 레포지토리 이슈 보러가기"}
       </div>
 
       <div className="favoriteListWrap">
-        {favoriteList.length ? (
-          favoriteList.map((item) => <SearchCard key={item.id} item={item} />)
-        ) : (
+        {favoriteList.map((item) => <SearchCard key={item.id} item={item} />)}
+        {!favoriteList.length && (
           <div className="nonData">
             관심 레포지토리가
             <br />

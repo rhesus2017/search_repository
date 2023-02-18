@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "react-query";
 import { getRepositoryListAPI } from "../apis/repositoryAPI";
 import { repositoryKeys } from "./queryKeys";
 
-export const useRepositoryListQuery = (keyword: string) => {
+const useRepositoryListQuery = (keyword: string) => {
   const query = useInfiniteQuery(
     repositoryKeys.list(keyword),
     ({ pageParam = 1 }) => getRepositoryListAPI(keyword, pageParam),
@@ -24,3 +24,5 @@ export const useRepositoryListQuery = (keyword: string) => {
 
   return { ...query, items, total_count };
 };
+
+export default useRepositoryListQuery;

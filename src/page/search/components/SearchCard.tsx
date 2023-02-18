@@ -12,24 +12,20 @@ import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { useDispatch } from "react-redux";
 import { setReduxFavoriteList } from "../../../redux/favoriteListSlice";
-import { useEffect, useRef } from "react";
-import { useRepositoryListQuery } from "../../../queries/repositoryDadaHooks";
 import { message } from "antd";
+import { RefObject } from "react";
 
 const FAVORITE_MAX_LENGTH = 4;
 
 interface SearchCardProps {
   item: RepositoryListItem;
-  lastCard?: boolean;
+  targetRef?: RefObject<HTMLDivElement> | null
 }
 
 const SearchCard = (props: SearchCardProps) => {
-  const { item, lastCard } = props;
+  const { item, targetRef } = props;
   const dispatch = useDispatch();
-  const targetRef = useRef<HTMLDivElement>(null);
   const favoriteList = useAppSelector((state: RootState) => state.favoriteList);
-  const keyword = useAppSelector((state: RootState) => state.keyword);
-  const repositoryList = useRepositoryListQuery(keyword);
   const isFavorite = Boolean(
     favoriteList.filter((repo) => repo.id === item.id).length
   );
@@ -46,27 +42,8 @@ const SearchCard = (props: SearchCardProps) => {
     }
   };
 
-  useEffect(() => {
-    const handleObserver = (
-      entries: IntersectionObserverEntry[],
-      observer: IntersectionObserver
-    ) => {
-      const target = entries[0];
-      if (target.isIntersecting) {
-        observer.unobserve(target.target);
-        repositoryList.fetchNextPage();
-      }
-    };
-
-    const option = { rootMargin: "0px", threshold: 0 };
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (targetRef.current) observer.observe(targetRef.current);
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <SearchCardStyled ref={lastCard ? targetRef : null} className="listCard">
+    <SearchCardStyled ref={targetRef} className="listCard">
       <div className="button" onClick={handleFavoriteClick}>
         <img
           src={isFavorite ? favorite : notFavorite}
