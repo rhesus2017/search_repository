@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Pagination, Spin } from "antd";
+import { Pagination } from "antd";
 import { AxiosResponse } from "axios";
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
