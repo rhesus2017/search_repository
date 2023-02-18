@@ -15,7 +15,9 @@ export const queryClient = new QueryClient({
   },
 });
 
-axios.defaults.headers.common["Authorization"] = `token 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`;
+// API 시간당 요청 횟수가 적어 사용 시 문제가 생길 수 있습니다.
+// API 시간당 요청을 늘리기 원한다면 아래 토큰 텍스트 자리에 토큰을 넣고 주석을 해제해주세요.
+// axios.defaults.headers.common["Authorization"] = `token 토큰`;
 
 const App = () => {
   return (
