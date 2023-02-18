@@ -1,46 +1,8 @@
-# Getting Started with Create React App
+# 프로젝트 설정 및 실행 방법
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- 검색을 통해 관련 레포지토리 리스트를 불러올 수 있습니다.
+- 검색된 레포지토리의 페이지 당 개수는 80개입니다. 인피니티 스크롤로 다음 페이지를 볼 수 있습니다.
+- 검색된 레포지토리 상단 오른쪽 별모양을 누르면 관심 레포지토리에 추가할 수 있습니다. 다시 누르면 관심 레포지토리에서 삭제됩니다.
+- 관심 레포지토리는 오른쪽 사이드바에서 확인할 수 있습니다. 상단 오른쪽 별모양 버튼으로 관심 레포지토리에서 추가 / 삭제 가능합니다.
+- 관심 레포지토리 이슈 보러가기를 누르면 관심 레포지토리의 이슈를 모아서 업데이트 날짜 순으로 볼 수 있습니다.
+- 검색된 레포지토리 보러가기를 누르면 다시 검색된 레포지토리를 볼 수 있습니다.
